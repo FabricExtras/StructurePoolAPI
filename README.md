@@ -35,4 +35,4 @@ dependencies {
 
 To see how the API is used, check out the [example mod](src/testmod/java/net/testmod/TestMod.java).
 
-Additionally, a config type is included in the API package, which can be read/written using in JSON format.
+Additionally, a config type is included in the API package, which can be read/written using JSON format. So you can expose the injection parameters a config file for players.
