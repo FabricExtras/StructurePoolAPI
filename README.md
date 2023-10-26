@@ -1,10 +1,11 @@
 # StructurePoolAPI
 
-Can be used to inject structures into structure pools. Popular example:
-- Adding custom village structures to villages
-
-Additional features:
+### Features
+- Inject structures into structure pools
 - Maximize spawn count of the injected structure (e.g. 2 per village)
+
+### Example use cases
+- Adding custom buildings to villages
 
 ## Try it out
 
