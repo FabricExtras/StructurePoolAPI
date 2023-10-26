@@ -3,8 +3,10 @@
   "id": "structure_pool_api",
   "version": "${version}",
   "name": "Structure Pool API",
-  "description": "",
-  "authors": [],
+  "description": "Allows injecting structures into structure pools.",
+  "authors": [
+    "Daedelus"
+  ],
   "contact": {
     "repo": "https://github.com/FabricExtras/StructurePoolAPI"
   },
@@ -23,5 +25,6 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}"
-  }
+  },
+  "accessWidener": "structure_pool.accesswidener"
 }

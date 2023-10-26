@@ -8,6 +8,5 @@ public class StructurePoolMod implements ModInitializer {
      */
     @Override
     public void onInitialize() {
-        System.out.println("Hello Fabric world!");
     }
 }
