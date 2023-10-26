@@ -6,6 +6,13 @@ Can be used to inject structures into structure pools. Popular example:
 Additional features:
 - Maximize spawn count of the injected structure (e.g. 2 per village)
 
+## Try it out
+
+Check out this repo, resolve dependencies, select `Testmod client` run config.
+
+![Title](.github/testmod_config.png)
+
+Use `/locate` command to find villagers, with the example custom structures.
 
 ## Installation
 
@@ -35,4 +42,4 @@ dependencies {
 
 To see how the API is used, check out the [example mod](src/testmod/java/net/testmod/TestMod.java).
 
-Additionally, a config type is included in the API package, which can be read/written using JSON format. So you can expose the injection parameters a config file for players.
+Additionally, a config type is included in the API package, which can be read/written using JSON format. So you can expose the injection parameters as a config file for players.
