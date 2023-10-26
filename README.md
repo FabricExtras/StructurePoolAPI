@@ -34,7 +34,7 @@ repositories {
 Dependency
 ```groovy
 dependencies {
-    modImplementation "maven.modrinth:structure_pool_api:${project.structure_pool_api_version}"
+    modImplementation "maven.modrinth:structure-pool-api:${project.structure_pool_api_version}"
 }
 ```
 
