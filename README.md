@@ -24,7 +24,7 @@ repositories {
 }
 ```
 
-### Fabric workspace
+Dependency
 ```groovy
 dependencies {
     modImplementation "maven.modrinth:structure_pool_api:${project.structure_pool_api_version}"
