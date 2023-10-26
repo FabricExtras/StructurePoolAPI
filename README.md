@@ -49,3 +49,9 @@ Additionally, a config type is included in the API package, which can be read/wr
 Feel free to include this API in your mod, the license allows you to do so.
 
 If you want to say thank you, you can link this project as a dependency on Modrinth/CruseForge, so downloads are counted for this project too.
+
+Mod ID: `structure_pool_api`
+
+Modrinth dependency (gradle entry): `required.project 'structure-pool-api'`
+
+CurseForge dependency (gradle entry): `requiredDependency 'structure-pool-api'`
