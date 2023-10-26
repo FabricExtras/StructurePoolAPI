@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "icon": "assets/structure_pool/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "net.fabric_extras.structure_pool.StructurePoolMod"
