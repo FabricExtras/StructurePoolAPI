@@ -1,6 +1,6 @@
 # StructurePoolAPI
 
-Can be used to inject structures into structure pools. Popular exampe:
+Can be used to inject structures into structure pools. Popular example:
 - Adding custom village structures to villages
 
 Additional features:
