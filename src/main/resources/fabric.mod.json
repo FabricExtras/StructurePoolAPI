@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "structure_pool_api",
+  "version": "${version}",
+  "name": "Structure Pool API",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/FabricExtras/StructurePoolAPI"
+  },
+  "license": "MIT",
+  "icon": "assets/structure_pool/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "net.fabric_extras.structure_pool.StructurePoolMod"
+    ]
+  },
+  "mixins": [
+    "structure_pool.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

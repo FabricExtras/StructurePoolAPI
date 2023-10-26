@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.fabric_extras.structure_pool.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "StructurePoolAccessor",
+    "StructurePoolBasedGenerator_StructurePoolGeneratorMixin",
+    "StructurePoolMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
