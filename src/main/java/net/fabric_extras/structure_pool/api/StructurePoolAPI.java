@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StructurePoolAPI {
-    public static void loadConfig(StructurePoolConfig config) {
+    public static void injectAll(StructurePoolConfig config) {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             for(var entry: config.entries) {
                 var pooldId = new Identifier(entry.pool);
                 for (var structure: entry.structures) {
                     var structureId = new Identifier(structure.id);
-                    addToStructurePool(server, pooldId, structureId, structure.weight);
+                    injectIntoStructurePool(server, pooldId, structureId, structure.weight);
                     if (structure.limit > 0) {
                         limitSpawn(pooldId, structureId, structure.limit);
                     }
@@ -40,7 +40,7 @@ public class StructurePoolAPI {
             RegistryKeys.PROCESSOR_LIST, new Identifier("minecraft", "empty"));
 
 
-    public static void addToStructurePool(MinecraftServer server, Identifier poolId, Identifier structureId, int weight) {
+    public static void injectIntoStructurePool(MinecraftServer server, Identifier poolId, Identifier structureId, int weight) {
         RegistryEntry<StructureProcessorList> emptyProcessorList = server.getRegistryManager()
                 .get(RegistryKeys.PROCESSOR_LIST)
                 .entryOf(EMPTY_PROCESSOR_LIST_KEY);
