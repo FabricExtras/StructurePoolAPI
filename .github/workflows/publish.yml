@@ -43,5 +43,5 @@ jobs:
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
           MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
           GH_API_KEY: ${{ secrets.GH_API_KEY }}
-          GH_OWNER: ${{ github.event.repository.owner }}
+          GH_OWNER: ${{ github.repository_owner }}
           GH_REPO: ${{ github.event.repository.name }}
