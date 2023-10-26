@@ -43,3 +43,9 @@ dependencies {
 To see how the API is used, check out the [example mod](src/testmod/java/net/testmod/TestMod.java).
 
 Additionally, a config type is included in the API package, which can be read/written using JSON format. So you can expose the injection parameters as a config file for players.
+
+## Include or depend
+
+Feel free to include this API in your mod, the license allows you to do so.
+
+If you want to say thank you, you can link this project as a dependency on Modrinth/CruseForge, so downloads are counted for this project too.
