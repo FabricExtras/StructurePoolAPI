@@ -11,6 +11,7 @@ import net.minecraft.structure.StructureTemplate;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
 import net.minecraft.structure.pool.StructurePoolElement;
+import net.minecraft.structure.pool.alias.StructurePoolAliasLookup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
@@ -34,9 +35,9 @@ public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
      * so we save here what is the sub-pool id that is currently being generated.
      */
 
-    @WrapOperation(method = "generatePiece", at = @At(value = "INVOKE", target = "Lnet/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator;getPoolKey(Lnet/minecraft/structure/StructureTemplate$StructureBlockInfo;)Lnet/minecraft/registry/RegistryKey;"))
-    private RegistryKey<StructurePool> getPoolKey_Wrapped(StructureTemplate.StructureBlockInfo blockInfo, Operation<RegistryKey<StructurePool>> original) {
-        var key = original.call(blockInfo);
+    @WrapOperation(method = "generatePiece", at = @At(value = "INVOKE", target = "Lnet/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator;lookupPool(Lnet/minecraft/structure/StructureTemplate$StructureBlockInfo;Lnet/minecraft/structure/pool/alias/StructurePoolAliasLookup;)Lnet/minecraft/registry/RegistryKey;"))
+    private RegistryKey<StructurePool> getPoolKey_Wrapped(StructureTemplate.StructureBlockInfo structureBlockInfo, StructurePoolAliasLookup aliasLookup, Operation<RegistryKey<StructurePool>> original) {
+        var key = original.call(structureBlockInfo, aliasLookup);
         var poolId = key.getValue();
         // System.out.println("getPoolKey_Wrapped " + " | at: " + blockInfo.pos() + " | Generating: " + key.getValue() + " | session: " + Integer.toHexString(this.hashCode()));
         if (!limitedSpawns.containsKey(poolId) && StructurePoolAPI.spawnLimitations.containsKey(poolId)) {

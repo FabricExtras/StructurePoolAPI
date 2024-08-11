@@ -17,16 +17,16 @@ public class TestMod implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             // Target structure pool
-            var targetPool = new Identifier("minecraft:village/plains/houses");
+            var targetPool = Identifier.of("minecraft:village/plains/houses");
             // Our structure (found amongst data files)
-            var structureId = new Identifier("testmod:village/plains/gazebo");
+            var structureId = Identifier.of("testmod:village/plains/gazebo");
             StructurePoolAPI.injectIntoStructurePool(
                     server,
                     targetPool, // Target structure pool
                     structureId, // Our structure (found amongst data files)
-                    10 // Weight (higher numbers increase relative spawn chance)
+                    20 // Weight (higher numbers increase relative spawn chance)
             );
-            StructurePoolAPI.limitSpawn(targetPool, structureId, 3);
+            StructurePoolAPI.limitSpawn(targetPool, structureId, 2);
         });
 
         // This config represents a fully serializable JSON structure
