@@ -1,3 +1,7 @@
+# 1.1.2
+
+- Allow running on 1.21
+
 # 1.1.1
 
 - Update to Minecraft 1.21.1
