@@ -2,11 +2,11 @@ package net.fabric_extras.structure_pool;
 
 import net.fabricmc.api.ModInitializer;
 
-public class StructurePoolMod implements ModInitializer {
+public class StructurePoolMod {
+    public static String ID = "structure_pool_api";
     /**
      * Runs the mod initializer.
      */
-    @Override
-    public void onInitialize() {
+    public static void init() {
     }
 }

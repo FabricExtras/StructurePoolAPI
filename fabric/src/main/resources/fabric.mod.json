@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabric_extras.structure_pool.StructurePoolMod"
+      "net.fabric_extras.structure_pool.fabric.FabricMod"
     ]
   },
   "mixins": [
