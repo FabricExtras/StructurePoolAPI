@@ -25,6 +25,5 @@
     "fabricloader": ">=${fabric_loader_version}",
     "fabric": "*",
     "minecraft": ">=${minecraft_compat_version}"
-  },
-  "accessWidener": "structure_pool.accesswidener"
+  }
 }

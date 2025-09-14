@@ -29,6 +29,3 @@ side = "BOTH"
 
 [[mixins]]
 config = "structure_pool.mixins.json"
-
-[[accessTransformers]]
-file = "structure_pool.accesswidener"

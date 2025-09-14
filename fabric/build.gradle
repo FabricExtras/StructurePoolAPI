@@ -25,6 +25,7 @@ loom {
             source sourceSets.testmod
         }
     }
+    accessWidenerPath = project(":common").loom.accessWidenerPath
 }
 
 configurations {
@@ -80,6 +81,7 @@ shadowJar {
 }
 
 remapJar {
+    injectAccessWidener = true
     inputFile.set shadowJar.archiveFile
 }
 
