@@ -11,7 +11,7 @@
     "repo": "https://github.com/FabricExtras/StructurePoolAPI"
   },
   "license": "MIT",
-  "icon": "assets/structure_pool/icon.png",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
