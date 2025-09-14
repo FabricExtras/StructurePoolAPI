@@ -3,7 +3,6 @@ package net.fabric_extras.structure_pool.api;
 import com.mojang.datafixers.util.Pair;
 import net.fabric_extras.structure_pool.internal.StructurePoolExtension;
 import net.fabric_extras.structure_pool.mixin.StructurePoolAccessor;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -17,19 +16,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StructurePoolAPI {
+    private static final ArrayList<StructurePoolConfig.Entry> pendingInjections = new ArrayList<>();
     public static void injectAll(StructurePoolConfig config) {
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            for(var entry: config.entries) {
-                var pooldId = Identifier.of(entry.pool);
-                for (var structure: entry.structures) {
-                    var structureId = Identifier.of(structure.id);
-                    injectIntoStructurePool(server, pooldId, structureId, structure.weight);
-                    if (structure.limit > 0) {
-                        limitSpawn(pooldId, structureId, structure.limit);
-                    }
+        pendingInjections.addAll(config.entries);
+    }
+
+    public static void processInjections(MinecraftServer server) {
+        for(var entry: pendingInjections) {
+            var pooldId = Identifier.of(entry.pool);
+            for (var structure: entry.structures) {
+                var structureId = Identifier.of(structure.id);
+                injectIntoStructurePool(server, pooldId, structureId, structure.weight);
+                if (structure.limit > 0) {
+                    limitSpawn(pooldId, structureId, structure.limit);
                 }
             }
-        });
+        }
+        pendingInjections.clear();
     }
 
     /**

@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/FabricExtras/StructurePoolAPI/issues"
+license = "MIT"
 
 [[mods]]
 modId = "structure_pool_api"
 version = "${version}"
 displayName = "Structure Pool API"
-authors = "Me!"
+authors = "Daedelus"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Allows injecting structures into structure pools.
 '''
 #logoFile = ""
 
@@ -28,4 +28,7 @@ ordering = "NONE"
 side = "BOTH"
 
 [[mixins]]
-config = "structure_pool_api.mixins.json"
+config = "structure_pool.mixins.json"
+
+[[accessTransformers]]
+file = "structure_pool.accesswidener"

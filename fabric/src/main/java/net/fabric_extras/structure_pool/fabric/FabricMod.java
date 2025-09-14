@@ -1,7 +1,9 @@
 package net.fabric_extras.structure_pool.fabric;
 
 import net.fabric_extras.structure_pool.StructurePoolMod;
+import net.fabric_extras.structure_pool.api.StructurePoolAPI;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 public final class FabricMod implements ModInitializer {
     @Override
@@ -12,5 +14,9 @@ public final class FabricMod implements ModInitializer {
 
         // Run our common setup.
         StructurePoolMod.init();
+
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+            StructurePoolAPI.processInjections(server);
+        });
     }
 }

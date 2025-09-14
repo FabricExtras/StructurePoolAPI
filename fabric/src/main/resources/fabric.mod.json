@@ -22,7 +22,7 @@
     "structure_pool.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=${fabric_loader_version}",
     "fabric": "*",
     "minecraft": ">=${minecraft_compat_version}"
   },
