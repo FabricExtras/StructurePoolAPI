@@ -86,10 +86,6 @@ if(project.hasProperty('release_type')) {
             addGameVersion "${rootProject.minecraft_version}"
             addGameVersion "NeoForge"
 
-            relations {
-                requiredDependency 'forgified-fabric-api'
-            }
-
             mainArtifact(remapJar)
             afterEvaluate {
                 uploadTask.dependsOn(remapJar)
@@ -112,7 +108,6 @@ if(project.hasProperty('release_type')) {
         loaders = ["neoforge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
         changelog = changelog_last_section()
         dependencies { // A special DSL for creating dependencies
-            required.project 'forgified-fabric-api'
         }
     }
 }
