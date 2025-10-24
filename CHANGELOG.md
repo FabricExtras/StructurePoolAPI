@@ -1,3 +1,7 @@
+# 1.2.1
+
+- Fix structures not generating second first world load
+
 # 1.2.0
 
 - Migrate to Architectury

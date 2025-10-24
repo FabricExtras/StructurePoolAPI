@@ -18,21 +18,25 @@ import java.util.HashMap;
 public class StructurePoolAPI {
     private static final ArrayList<StructurePoolConfig.Entry> pendingInjections = new ArrayList<>();
     public static void injectAll(StructurePoolConfig config) {
-        pendingInjections.addAll(config.entries);
+        synchronized (pendingInjections) {
+            pendingInjections.addAll(config.entries);
+        }
     }
 
     public static void processInjections(MinecraftServer server) {
-        for(var entry: pendingInjections) {
-            var pooldId = Identifier.of(entry.pool);
-            for (var structure: entry.structures) {
-                var structureId = Identifier.of(structure.id);
-                injectIntoStructurePool(server, pooldId, structureId, structure.weight);
-                if (structure.limit > 0) {
-                    limitSpawn(pooldId, structureId, structure.limit);
+        synchronized (pendingInjections) {
+            for(var entry: pendingInjections) {
+                var pooldId = Identifier.of(entry.pool);
+                for (var structure: entry.structures) {
+                    var structureId = Identifier.of(structure.id);
+                    injectIntoStructurePool(server, pooldId, structureId, structure.weight);
+                    if (structure.limit > 0) {
+                        limitSpawn(pooldId, structureId, structure.limit);
+                    }
                 }
             }
         }
-        pendingInjections.clear();
+        // pendingInjections.clear();
     }
 
     /**
