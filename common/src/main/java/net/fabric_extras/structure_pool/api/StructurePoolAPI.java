@@ -49,12 +49,12 @@ public class StructurePoolAPI {
 
     public static void injectIntoStructurePool(MinecraftServer server, Identifier poolId, Identifier structureId, int weight) {
         RegistryEntry<StructureProcessorList> emptyProcessorList = server.getRegistryManager()
-                .get(RegistryKeys.PROCESSOR_LIST)
-                .entryOf(EMPTY_PROCESSOR_LIST_KEY);
+                .getOrThrow(RegistryKeys.PROCESSOR_LIST)
+                .getOrThrow(EMPTY_PROCESSOR_LIST_KEY);
 
         var poolGetter = server.getRegistryManager()
-                .get(RegistryKeys.TEMPLATE_POOL)
-                .getOrEmpty(poolId);
+                .getOrThrow(RegistryKeys.TEMPLATE_POOL)
+                .getOptionalValue(poolId);
 
         if (poolGetter.isEmpty()) {
             System.err.println("StructurePool API: cannot add to " + poolId + " as it cannot be found!");

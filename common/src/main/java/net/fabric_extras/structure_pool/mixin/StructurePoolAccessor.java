@@ -16,10 +16,10 @@ public interface StructurePoolAccessor {
     @Accessor(value = "elements")
     ObjectArrayList<StructurePoolElement> getElements();
 
-    @Accessor(value = "elementCounts")
+    @Accessor(value = "elementWeights")
     List<Pair<StructurePoolElement, Integer>> getElementCounts();
 
-    @Accessor(value = "elementCounts")
+    @Accessor(value = "elementWeights")
     @Mutable
     void setElementCounts(List<Pair<StructurePoolElement, Integer>> list);
 }
