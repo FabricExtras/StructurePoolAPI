@@ -1,16 +1,16 @@
 package net.rpg_foundation.structure_pool.mixin;
 
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.rpg_foundation.structure_pool.internal.StructurePoolExtension;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Mixin(StructurePool.class)
+@Mixin(StructureTemplatePool.class)
 public class StructurePoolMixin implements StructurePoolExtension {
     private Map<StructurePoolElement, Identifier> identifiedElements = new HashMap<>();
     @Override

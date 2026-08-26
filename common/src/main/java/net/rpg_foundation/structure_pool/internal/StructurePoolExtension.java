@@ -1,7 +1,7 @@
 package net.rpg_foundation.structure_pool.internal;
 
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import org.jetbrains.annotations.Nullable;
 
 public interface StructurePoolExtension {
