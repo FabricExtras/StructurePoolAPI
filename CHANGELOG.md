@@ -1,6 +1,6 @@
 # 1.3.0
 
-- Modernize package and maven group
+- Modernize package and maven group: Java package `net.rpg_foundation.structure_pool` (was `net.fabric_extras.structure_pool`), maven group `net.rpg_foundation` (was `net.foundation`); mod id and data unchanged
 
 # 1.2.1
 
