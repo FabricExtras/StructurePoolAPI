@@ -1,3 +1,7 @@
+# 1.3.0
+
+- Modernize package and maven group
+
 # 1.2.1
 
 - Fix structures not generating second first world load
