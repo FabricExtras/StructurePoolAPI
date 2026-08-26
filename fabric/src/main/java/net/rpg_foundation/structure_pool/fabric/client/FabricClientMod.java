@@ -1,4 +1,4 @@
-package net.rpg_foundation.structure_pool_api.fabric.client;
+package net.rpg_foundation.structure_pool.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 

@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.rpg_foundation.structure_pool_api.fabric.FabricMod"
+      "net.rpg_foundation.structure_pool.fabric.FabricMod"
     ]
   },
   "mixins": [

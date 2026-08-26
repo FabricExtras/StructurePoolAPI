@@ -1,4 +1,4 @@
-package net.rpg_foundation.structure_pool_api.mixin;
+package net.rpg_foundation.structure_pool.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

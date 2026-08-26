@@ -1,8 +1,8 @@
-package net.rpg_foundation.structure_pool_api.api;
+package net.rpg_foundation.structure_pool.api;
 
 import com.mojang.datafixers.util.Pair;
-import net.rpg_foundation.structure_pool_api.internal.StructurePoolExtension;
-import net.rpg_foundation.structure_pool_api.mixin.StructurePoolAccessor;
+import net.rpg_foundation.structure_pool.internal.StructurePoolExtension;
+import net.rpg_foundation.structure_pool.mixin.StructurePoolAccessor;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;

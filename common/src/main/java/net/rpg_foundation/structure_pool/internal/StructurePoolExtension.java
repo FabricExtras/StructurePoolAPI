@@ -1,4 +1,4 @@
-package net.rpg_foundation.structure_pool_api.internal;
+package net.rpg_foundation.structure_pool.internal;
 
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.util.Identifier;

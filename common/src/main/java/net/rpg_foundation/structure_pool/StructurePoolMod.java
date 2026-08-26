@@ -1,4 +1,4 @@
-package net.rpg_foundation.structure_pool_api;
+package net.rpg_foundation.structure_pool;
 
 public class StructurePoolMod {
     public static final String ID = "structure_pool_api";

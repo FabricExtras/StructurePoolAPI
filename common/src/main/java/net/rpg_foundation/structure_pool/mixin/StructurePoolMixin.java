@@ -1,6 +1,6 @@
-package net.rpg_foundation.structure_pool_api.mixin;
+package net.rpg_foundation.structure_pool.mixin;
 
-import net.rpg_foundation.structure_pool_api.internal.StructurePoolExtension;
+import net.rpg_foundation.structure_pool.internal.StructurePoolExtension;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.util.Identifier;

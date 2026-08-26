@@ -1,7 +1,7 @@
 package net.testmod;
 
-import net.rpg_foundation.structure_pool_api.api.StructurePoolAPI;
-import net.rpg_foundation.structure_pool_api.api.StructurePoolConfig;
+import net.rpg_foundation.structure_pool.api.StructurePoolAPI;
+import net.rpg_foundation.structure_pool.api.StructurePoolConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.util.Identifier;

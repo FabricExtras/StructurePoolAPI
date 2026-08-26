@@ -1,9 +1,9 @@
-package net.rpg_foundation.structure_pool_api.mixin;
+package net.rpg_foundation.structure_pool.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.rpg_foundation.structure_pool_api.api.StructurePoolAPI;
-import net.rpg_foundation.structure_pool_api.internal.StructurePoolExtension;
+import net.rpg_foundation.structure_pool.api.StructurePoolAPI;
+import net.rpg_foundation.structure_pool.internal.StructurePoolExtension;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.structure.PoolStructurePiece;

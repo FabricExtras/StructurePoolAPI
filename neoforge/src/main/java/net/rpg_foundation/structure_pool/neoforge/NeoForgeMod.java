@@ -1,7 +1,7 @@
-package net.rpg_foundation.structure_pool_api.neoforge;
+package net.rpg_foundation.structure_pool.neoforge;
 
-import net.rpg_foundation.structure_pool_api.StructurePoolMod;
-import net.rpg_foundation.structure_pool_api.api.StructurePoolAPI;
+import net.rpg_foundation.structure_pool.StructurePoolMod;
+import net.rpg_foundation.structure_pool.api.StructurePoolAPI;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
