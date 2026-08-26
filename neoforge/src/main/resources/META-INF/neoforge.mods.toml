@@ -28,4 +28,4 @@ ordering = "NONE"
 side = "BOTH"
 
 [[mixins]]
-config = "structure_pool.mixins.json"
+config = "structure_pool_api.mixins.json"

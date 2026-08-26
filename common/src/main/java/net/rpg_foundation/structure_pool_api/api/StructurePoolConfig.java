@@ -1,4 +1,4 @@
-package net.fabric_extras.structure_pool.api;
+package net.rpg_foundation.structure_pool_api.api;
 
 import java.util.ArrayList;
 import java.util.List;

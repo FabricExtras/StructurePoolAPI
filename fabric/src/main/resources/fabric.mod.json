@@ -15,11 +15,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabric_extras.structure_pool.fabric.FabricMod"
+      "net.rpg_foundation.structure_pool_api.fabric.FabricMod"
     ]
   },
   "mixins": [
-    "structure_pool.mixins.json"
+    "structure_pool_api.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

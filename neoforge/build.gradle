@@ -68,7 +68,7 @@ shadowJar {
 
 remapJar {
     inputFile.set shadowJar.archiveFile
-    atAccessWideners.add("structure_pool.accesswidener")
+    atAccessWideners.add("structure_pool_api.accesswidener")
 }
 
 // Publishing is configured unconditionally: tasks only *run* when explicitly invoked

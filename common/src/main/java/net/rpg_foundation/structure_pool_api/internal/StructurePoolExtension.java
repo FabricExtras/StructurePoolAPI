@@ -1,4 +1,4 @@
-package net.fabric_extras.structure_pool.internal;
+package net.rpg_foundation.structure_pool_api.internal;
 
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.util.Identifier;

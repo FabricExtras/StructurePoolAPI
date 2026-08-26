@@ -1,7 +1,7 @@
-package net.fabric_extras.structure_pool.fabric;
+package net.rpg_foundation.structure_pool_api.fabric;
 
-import net.fabric_extras.structure_pool.StructurePoolMod;
-import net.fabric_extras.structure_pool.api.StructurePoolAPI;
+import net.rpg_foundation.structure_pool_api.StructurePoolMod;
+import net.rpg_foundation.structure_pool_api.api.StructurePoolAPI;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 

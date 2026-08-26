@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.fabric_extras.structure_pool.mixin",
+  "package": "net.rpg_foundation.structure_pool_api.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "StructurePoolAccessor",
