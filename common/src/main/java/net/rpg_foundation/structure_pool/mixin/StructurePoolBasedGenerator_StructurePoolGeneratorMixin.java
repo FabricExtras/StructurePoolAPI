@@ -26,7 +26,9 @@ import java.util.List;
 @Mixin(JigsawPlacement.Placer.class)
 public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
     @Shadow @Final private Registry<StructureTemplatePool> pools;
+    @Unique
     private HashMap<Identifier, HashMap<Identifier, Integer>> limitedSpawns = new HashMap<>();
+    @Unique
     @Nullable private Identifier currentPoolId;
 
     /**
@@ -91,6 +93,7 @@ public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
         return ((StructurePoolExtension)pool).identify(element);
     }
 
+    @Unique
     private boolean limitAllowsSpawn(StructurePoolElement element) {
         var structureId = resolveStructureElementId(element);
         if (structureId == null) {
@@ -107,6 +110,7 @@ public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
         return limit > 0;
     }
 
+    @Unique
     private void consumeLimit(StructurePoolElement element) {
         var structureId = resolveStructureElementId(element);
         if (structureId == null) { return; }
