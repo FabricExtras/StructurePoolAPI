@@ -17,9 +17,6 @@ public interface StructurePoolAccessor {
     ObjectArrayList<StructurePoolElement> getElements();
 
     @Accessor(value = "rawTemplates")
-    List<Pair<StructurePoolElement, Integer>> getElementCounts();
-
-    @Accessor(value = "rawTemplates")
     @Mutable
     void setElementCounts(List<Pair<StructurePoolElement, Integer>> list);
 }

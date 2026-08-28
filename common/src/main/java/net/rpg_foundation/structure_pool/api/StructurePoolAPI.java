@@ -66,7 +66,8 @@ public class StructurePoolAPI {
         var piece = StructurePoolElement.single(structureId.toString(), emptyProcessorList)
                 .apply(StructureTemplatePool.Projection.RIGID);
         ((StructurePoolExtension)pool).remember(piece, structureId);
-        var list = new ArrayList<>(((StructurePoolAccessor) pool).getElementCounts());
+        // `getTemplates()` is vanilla-public (@VisibleForTesting) and returns the live `rawTemplates` list.
+        var list = new ArrayList<>(pool.getTemplates());
         list.add(Pair.of(piece, weight));
         ((StructurePoolAccessor) pool).setElementCounts(list);
 
