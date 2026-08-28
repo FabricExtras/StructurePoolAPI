@@ -10,14 +10,21 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.rpg_foundation.structure_pool.StructurePoolMod;
 import net.rpg_foundation.structure_pool.mixin.StructurePoolAccessor;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StructurePoolAPI {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StructurePoolMod.ID);
+
     private static final ArrayList<StructurePoolConfig.Entry> pendingInjections = new ArrayList<>();
     public static void injectAll(StructurePoolConfig config) {
         synchronized (pendingInjections) {
@@ -38,7 +45,8 @@ public class StructurePoolAPI {
                 }
             }
         }
-        // pendingInjections.clear();
+        // NOT cleared on purpose: a single-player server start builds fresh registries, so the
+        // same entries have to be re-applied to the new pool objects on every world load.
     }
 
     /**
@@ -68,6 +76,10 @@ public class StructurePoolAPI {
     private static final Map<StructurePoolElement, InjectedElement> injectedElements =
             new MapMaker().weakKeys().makeMap();
 
+    /** Which structure ids were already injected into a given pool *instance* (weak identity keys). */
+    private static final Map<StructureTemplatePool, Set<Identifier>> injectedInto =
+            new MapMaker().weakKeys().makeMap();
+
     /**
      * Internal — used by the {@code JigsawPlacement$Placer} mixin.
      * @return the (pool, structure) this element was injected for, or null if we did not inject it.
@@ -87,11 +99,20 @@ public class StructurePoolAPI {
                 .getOptional(poolId);
 
         if (poolGetter.isEmpty()) {
-            System.err.println("StructurePool API: cannot add to " + poolId + " as it cannot be found!");
+            LOGGER.error("Cannot add {} to structure pool {}: no such pool. Check the pool id in the config.",
+                    structureId, poolId);
             return;
         }
 
         var pool = poolGetter.get();
+
+        // Idempotency: the pool object is rebuilt per server start, so re-injecting on a later
+        // world load is required — but injecting the same structure twice into the *same* pool
+        // instance would double its weight and create a second, independently capped element.
+        if (!injectedInto.computeIfAbsent(pool, p -> ConcurrentHashMap.newKeySet()).add(structureId)) {
+            LOGGER.warn("Skipping duplicate injection of {} into structure pool {}.", structureId, poolId);
+            return;
+        }
 
         var pieceList = ((StructurePoolAccessor) pool).getElements();
         var piece = StructurePoolElement.single(structureId.toString(), emptyProcessorList)
@@ -105,10 +126,23 @@ public class StructurePoolAPI {
         for (int i = 0; i < weight; ++i) {
             pieceList.add(piece);
         }
+
+        // `maxSize` is memoised on the first `getMaxSize` call and drives the jigsaw expansion
+        // hack's height budget. We just changed `templates`, so drop the memo (Integer.MIN_VALUE is
+        // vanilla's private SIZE_UNSET sentinel). Harmless today — injection runs at
+        // SERVER_STARTING, before any worldgen — but a stale value would be silent if that changed.
+        ((StructurePoolAccessor) pool).setMaxSize(Integer.MIN_VALUE);
     }
 
     /**
      * Limiting spawn count
+     *
+     * <p>The cap applies to elements drawn as *children* during jigsaw expansion. A structure's
+     * start piece is picked by {@code JigsawPlacement.addPieces} through
+     * {@code StructureTemplatePool#getRandomTemplate}, which no wrap touches — so injecting into a
+     * pool that a structure uses as its *start* pool yields an uncapped, unfiltered element (B6).
+     * Not fixable without a second wrap that would change worldgen for every structure; all known
+     * consumers inject into the village house pools, which are only ever child pools.
      */
 
     public record SpawnPerk(int limit) { }

@@ -19,4 +19,12 @@ public interface StructurePoolAccessor {
     @Accessor(value = "rawTemplates")
     @Mutable
     void setElementCounts(List<Pair<StructurePoolElement, Integer>> list);
+
+    /**
+     * `maxSize` is a memo of the tallest element, computed lazily and never invalidated by vanilla
+     * (the pool is immutable there). Injecting resets it to vanilla's SIZE_UNSET sentinel. The
+     * field is not final, so no @Mutable is needed.
+     */
+    @Accessor(value = "maxSize")
+    void setMaxSize(int maxSize);
 }
