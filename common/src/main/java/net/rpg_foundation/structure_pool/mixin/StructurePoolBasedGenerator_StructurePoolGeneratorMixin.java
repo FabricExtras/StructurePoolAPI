@@ -2,25 +2,20 @@ package net.rpg_foundation.structure_pool.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
 import net.rpg_foundation.structure_pool.api.StructurePoolAPI;
-import net.rpg_foundation.structure_pool.internal.StructurePoolExtension;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // `JigsawPlacement$Placer` is a private inner class, so a class literal would need an access
 // widener just to compile. The string form needs no accessibility at all -- Mixin works on
@@ -34,40 +29,22 @@ import java.util.List;
 // and Loom 1.17 ships no Mixin AP, so grep this log line after any rename of the target.
 @Mixin(targets = "net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement$Placer")
 public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
-    @Shadow @Final private Registry<StructureTemplatePool> pools;
-    @Unique
-    private HashMap<Identifier, HashMap<Identifier, Integer>> limitedSpawns = new HashMap<>();
-    @Unique
-    @Nullable private Identifier currentPoolId;
-
     /**
-     * Structure sub-pools are shuffled during the generation process,
-     * so we save here what is the sub-pool id that is currently being generated.
+     * Remaining spawn budget for this one jigsaw placement: injected pool id -> structure id ->
+     * spawns left. One `Placer` instance is one structure placement, so the budget is naturally
+     * scoped and thrown away with it.
+     *
+     * <p>Elements are attributed through {@link StructurePoolAPI#injectedElement} — the element
+     * instance itself carries its (pool, structure). The previous implementation instead tracked
+     * "which pool is being expanded right now" from a `PoolAliasLookup.lookup` wrap, which was only
+     * ever set for the *target* pool; `tryPlacingChildren` also draws from the pool's **fallback**
+     * pool, and those elements were silently exempted from their cap.
      */
-
-    @WrapOperation(method = "tryPlacingChildren", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/structure/pools/alias/PoolAliasLookup;lookup(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/resources/ResourceKey;"))
-    private ResourceKey<StructureTemplatePool> getPoolKey_Wrapped(PoolAliasLookup aliasLookup, ResourceKey<StructureTemplatePool> poolKey, Operation<ResourceKey<StructureTemplatePool>> original) {
-        var key = original.call(aliasLookup, poolKey);
-        var poolId = key.identifier();
-        // System.out.println("getPoolKey_Wrapped " + " | at: " + blockInfo.pos() + " | Generating: " + key.getValue() + " | session: " + Integer.toHexString(this.hashCode()));
-        if (!limitedSpawns.containsKey(poolId) && StructurePoolAPI.spawnLimitations.containsKey(poolId)) {
-            var freshLimitations = new HashMap<Identifier, Integer>();
-            for (var entry: StructurePoolAPI.spawnLimitations.get(poolId).entrySet()) {
-                var structureId = entry.getKey();
-                var spawnPerk = entry.getValue();
-                var spawnLimit = spawnPerk.limit();
-                freshLimitations.put(structureId, spawnLimit);
-            }
-            limitedSpawns.put(poolId, freshLimitations);
-            // System.out.println("Adding limitations for pool: " + poolId + " | entries: " + freshLimitations);
-        }
-
-        currentPoolId = key.identifier();
-        return key;
-    }
+    @Unique
+    private Map<Identifier, Map<Identifier, Integer>> limitedSpawns = new HashMap<>();
 
     /**
-     * Filtering out elements that are not allowed are over spawn limit
+     * Filtering out elements that are over their spawn limit
      */
 
     @WrapOperation(method = "tryPlacingChildren", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool;getShuffledTemplates(Lnet/minecraft/util/RandomSource;)Ljava/util/List;"))
@@ -90,46 +67,43 @@ public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
         return original.call(list, object);
     }
 
+    /**
+     * @return spawns left for this element in this placement, or null when the element is not one
+     *         of ours or carries no configured limit.
+     */
     @Unique
-    @Nullable private Identifier resolveStructureElementId(StructurePoolElement element) {
-        if (currentPoolId == null) {
+    @Nullable
+    private Integer remainingSpawns(StructurePoolElement element) {
+        var injected = StructurePoolAPI.injectedElement(element);
+        if (injected == null) {
             return null;
         }
-        var pool = pools.getValue(currentPoolId);
-        if (pool == null) {
+        var poolLimits = StructurePoolAPI.spawnLimitations.get(injected.poolId());
+        if (poolLimits == null) {
             return null;
         }
-        return ((StructurePoolExtension)pool).identify(element);
+        var perk = poolLimits.get(injected.structureId());
+        if (perk == null) {
+            return null;
+        }
+        return limitedSpawns
+                .computeIfAbsent(injected.poolId(), id -> new HashMap<>())
+                .computeIfAbsent(injected.structureId(), id -> perk.limit());
     }
 
     @Unique
     private boolean limitAllowsSpawn(StructurePoolElement element) {
-        var structureId = resolveStructureElementId(element);
-        if (structureId == null) {
-            return true;
-        }
-        if (!limitedSpawns.containsKey(currentPoolId)) {
-            return true;
-        }
-        if (!limitedSpawns.get(currentPoolId).containsKey(structureId)) {
-            return true;
-        }
-        var limit = limitedSpawns.get(currentPoolId).get(structureId);
-        // System.out.println("limitAllowsSpawn " + " | structureId: " + structureId + " | limit: " + limit);
-        return limit > 0;
+        var remaining = remainingSpawns(element);
+        return remaining == null || remaining > 0;
     }
 
     @Unique
     private void consumeLimit(StructurePoolElement element) {
-        var structureId = resolveStructureElementId(element);
-        if (structureId == null) { return; }
-        var poolSpecificLimits = limitedSpawns.get(currentPoolId);
-        if (poolSpecificLimits == null) { return; }
-        if (!poolSpecificLimits.containsKey(structureId)) { return; }
-        var limit = poolSpecificLimits.get(structureId);
-        // System.out.println("limitWillBeConsumed " + " | structureId: " + structureId + " | limit: " + limit);
-        if (limit > 0) {
-            poolSpecificLimits.put(structureId, limit - 1);
+        var remaining = remainingSpawns(element);
+        if (remaining == null || remaining <= 0) {
+            return;
         }
+        var injected = StructurePoolAPI.injectedElement(element);
+        limitedSpawns.get(injected.poolId()).put(injected.structureId(), remaining - 1);
     }
 }

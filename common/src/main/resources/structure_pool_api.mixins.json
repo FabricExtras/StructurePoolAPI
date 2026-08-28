@@ -5,8 +5,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "StructurePoolAccessor",
-    "StructurePoolBasedGenerator_StructurePoolGeneratorMixin",
-    "StructurePoolMixin"
+    "StructurePoolBasedGenerator_StructurePoolGeneratorMixin"
   ],
   "client": [
   ],
