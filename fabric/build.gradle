@@ -31,7 +31,6 @@ loom {
             source sourceSets.testmod
         }
     }
-    accessWidenerPath = project(":common").loom.accessWidenerPath
 }
 
 configurations {
@@ -91,11 +90,6 @@ shadowJar {
 }
 
 assemble.dependsOn shadowJar
-
-// The access widener (common/src/main/resources/structure_pool_api.accesswidener) is only *shipped* if it is
-// also referenced from fabric.mod.json. With no remapJar, Loom 1.17's injection API does that on the shadow jar:
-// it copies the AW top-level into the jar and adds the "accessWidener" key to fabric.mod.json (doLast action).
-loom.injectAccessWidener(tasks.named('shadowJar'))
 
 configurations {
     apiElements {

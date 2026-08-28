@@ -7,7 +7,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
@@ -23,7 +22,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.HashMap;
 import java.util.List;
 
-@Mixin(JigsawPlacement.Placer.class)
+// `JigsawPlacement$Placer` is a private inner class, so a class literal would need an access
+// widener just to compile. The string form needs no accessibility at all -- Mixin works on
+// bytecode -- which is why this mod ships no access widener / access transformer.
+//
+// CAUTION, verified empirically on 26.1.2 (Fabric dev server): if this string is wrong, the run
+// does NOT crash. `"required": true` and `injectors.defaultRequire: 1` only govern injection
+// points *inside a target that was found*; a missing target class is logged as
+//   [main/WARN] (FabricLoader/Mixin) @Mixin target <name> was not found structure_pool_api.mixins.json:...
+// and the game boots clean, with the spawn caps silently disabled. javac cannot check the string
+// and Loom 1.17 ships no Mixin AP, so grep this log line after any rename of the target.
+@Mixin(targets = "net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement$Placer")
 public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
     @Shadow @Final private Registry<StructureTemplatePool> pools;
     @Unique

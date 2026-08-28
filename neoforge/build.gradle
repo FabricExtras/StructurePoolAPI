@@ -10,10 +10,6 @@ architectury {
     neoForge()
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-}
-
 configurations {
     common {
         canBeResolved = true
@@ -81,14 +77,6 @@ shadowJar {
 }
 
 assemble.dependsOn shadowJar
-
-// AW -> AT conversion for the shipped jar (was `remapJar { atAccessWideners.add(...) }`). The path is relative to
-// the jar root; the AW comes in through the shaded common resources, gets converted to META-INF/accesstransformer.cfg
-// and removed from the jar (doLast action on shadowJar).
-// NB: in Groovy `loom.neoForge` resolves to the boolean `isNeoForge()` -- use the `neoForge { }` action form.
-loom.neoForge {
-    convertAccessWideners(tasks.named('shadowJar'), 'structure_pool_api.accesswidener')
-}
 
 configurations {
     apiElements {
