@@ -11,7 +11,7 @@ authors = "Daedelus"
 description = '''
 Allows injecting structures into structure pools.
 '''
-logoFile = "icon.png"
+iconFile = "icon.png"
 
 [[dependencies.structure_pool_api]]
 modId = "neoforge"
