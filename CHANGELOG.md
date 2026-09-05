@@ -1,5 +1,6 @@
 # 1.3.0
 
+- Minecraft 26.2 support
 - Minecraft 26.1.2 support (Java 25).
 - Modernize package and maven group: Java package `net.rpg_foundation.structure_pool` (was `net.fabric_extras.structure_pool`), maven group `net.rpg_foundation` (was `net.foundation`); mod id and data unchanged
 - **Spawn limits are now enforced for elements reached through a pool's fallback pool.** They were silently uncapped before. **This is seed-visible**: filtering an element out of a candidate list changes what `Util.shuffle` returns, so an affected structure generates differently for the same seed. Only structures whose placement reaches an injected element via a fallback pool are affected.
