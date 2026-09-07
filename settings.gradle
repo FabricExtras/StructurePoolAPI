@@ -11,4 +11,4 @@ rootProject.name = 'structure_pool_api'
 
 include 'common'
 include 'fabric'
-include 'neoforge'
+include 'forge'

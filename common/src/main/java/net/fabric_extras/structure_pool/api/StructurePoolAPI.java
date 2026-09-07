@@ -26,9 +26,9 @@ public class StructurePoolAPI {
     public static void processInjections(MinecraftServer server) {
         synchronized (pendingInjections) {
             for(var entry: pendingInjections) {
-                var pooldId = Identifier.of(entry.pool);
+                var pooldId = new Identifier(entry.pool);
                 for (var structure: entry.structures) {
-                    var structureId = Identifier.of(structure.id);
+                    var structureId = new Identifier(structure.id);
                     injectIntoStructurePool(server, pooldId, structureId, structure.weight);
                     if (structure.limit > 0) {
                         limitSpawn(pooldId, structureId, structure.limit);
@@ -44,7 +44,7 @@ public class StructurePoolAPI {
      */
 
     private static final RegistryKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = RegistryKey.of(
-            RegistryKeys.PROCESSOR_LIST, Identifier.ofVanilla("empty"));
+            RegistryKeys.PROCESSOR_LIST, new Identifier("minecraft", "empty"));
 
 
     public static void injectIntoStructurePool(MinecraftServer server, Identifier poolId, Identifier structureId, int weight) {

@@ -1,3 +1,7 @@
+# 1.2.1.001
+
+- Backport to Minecraft 1.20.1 (Fabric + Forge 47)
+
 # 1.2.1
 
 - Fix structures not generating second first world load

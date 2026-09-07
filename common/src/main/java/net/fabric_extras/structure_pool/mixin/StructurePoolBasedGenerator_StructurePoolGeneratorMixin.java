@@ -11,7 +11,6 @@ import net.minecraft.structure.StructureTemplate;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
 import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.pool.alias.StructurePoolAliasLookup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +32,17 @@ public class StructurePoolBasedGenerator_StructurePoolGeneratorMixin {
     /**
      * Structure sub-pools are shuffled during the generation process,
      * so we save here what is the sub-pool id that is currently being generated.
+     *
+     * 1.20.1 has no `StructurePoolAliasLookup` (added in 1.20.3): `generatePiece` resolves the
+     * target pool through the private *static* helper `getPoolKey(StructureBlockInfo)`, so the
+     * hook sits there. `generatePiece` calls it twice, but the second call lives inside the
+     * `mapToInt` lambda, which javac desugars into its own synthetic method -- so this
+     * `@WrapOperation` matches exactly the one call that establishes the pool being generated.
      */
 
-    @WrapOperation(method = "generatePiece", at = @At(value = "INVOKE", target = "Lnet/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator;lookupPool(Lnet/minecraft/structure/StructureTemplate$StructureBlockInfo;Lnet/minecraft/structure/pool/alias/StructurePoolAliasLookup;)Lnet/minecraft/registry/RegistryKey;"))
-    private RegistryKey<StructurePool> getPoolKey_Wrapped(StructureTemplate.StructureBlockInfo structureBlockInfo, StructurePoolAliasLookup aliasLookup, Operation<RegistryKey<StructurePool>> original) {
-        var key = original.call(structureBlockInfo, aliasLookup);
+    @WrapOperation(method = "generatePiece", at = @At(value = "INVOKE", target = "Lnet/minecraft/structure/pool/StructurePoolBasedGenerator$StructurePoolGenerator;getPoolKey(Lnet/minecraft/structure/StructureTemplate$StructureBlockInfo;)Lnet/minecraft/registry/RegistryKey;"))
+    private RegistryKey<StructurePool> getPoolKey_Wrapped(StructureTemplate.StructureBlockInfo structureBlockInfo, Operation<RegistryKey<StructurePool>> original) {
+        var key = original.call(structureBlockInfo);
         var poolId = key.getValue();
         // System.out.println("getPoolKey_Wrapped " + " | at: " + blockInfo.pos() + " | Generating: " + key.getValue() + " | session: " + Integer.toHexString(this.hashCode()));
         if (!limitedSpawns.containsKey(poolId) && StructurePoolAPI.spawnLimitations.containsKey(poolId)) {

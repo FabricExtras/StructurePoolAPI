@@ -5,13 +5,24 @@ plugins {
 
 def platform = project.name;
 
-architectury {
-    platformSetupLoomIde()
-    neoForge()
-}
-
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    forge {
+        // Forge has no access wideners: Loom converts the common AW into an access transformer
+        // (META-INF/accesstransformer.cfg) at build time. Needed for the package-private
+        // StructurePoolBasedGenerator$StructurePoolGenerator the generator mixin targets.
+        convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+        // Forge 47 reads mixin configs from the jar MANIFEST (MixinConfigs: ...), which Loom writes from here.
+        mixinConfig "structure_pool.mixins.json"
+    }
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
 }
 
 configurations {
@@ -21,7 +32,7 @@ configurations {
     }
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentNeoForge.extendsFrom common
+    developmentForge.extendsFrom common
 
     // Files in this configuration will be bundled into your mod using the Shadow plugin.
     // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
@@ -33,10 +44,6 @@ configurations {
 
 repositories {
     maven {
-        name = 'NeoForged'
-        url = 'https://maven.neoforged.net/releases'
-    }
-    maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
         content {
@@ -46,17 +53,23 @@ repositories {
 }
 
 dependencies {
-    neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
+    forge "net.minecraftforge:forge:$rootProject.forge_version"
+
+    // Forge 47 ships plain Mixin 0.8.5 only: bundle MixinExtras for the @WrapOperation injectors in common.
+    // The forge artifact self-bootstraps through its IMixinConnector service; no plugin call needed.
+    // Must be 0.5.5+ -- 0.4.1 crashes Bootstrap on any `@Redirect` carrying an `at` array.
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${rootProject.mixin_extras_version}"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:${rootProject.mixin_extras_version}"))
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
+    shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 }
 
 processResources {
     inputs.property 'version', project.version
 
-    filesMatching('META-INF/neoforge.mods.toml') {
-        expand(project.properties)
+    filesMatching('META-INF/mods.toml') {
+        expand version: inputs.properties.version
     }
 }
 
@@ -67,7 +80,6 @@ shadowJar {
 
 remapJar {
     inputFile.set shadowJar.archiveFile
-    atAccessWideners.add("structure_pool.accesswidener")
 }
 
 // Publishing is configured unconditionally: tasks only *run* when explicitly invoked
@@ -89,13 +101,12 @@ publishMods {
             : me.modmuss50.mpp.ReleaseType.BETA
     version = "${project.version}-${platform}"   // per-loader suffix → unique Modrinth version
     displayName = "${project.version}"
-    modLoaders.add("neoforge")
+    modLoaders.add("forge")
 
     curseforge {
         projectId = providers.environmentVariable("CURSEFORGE_PROJECT_ID")   // numeric id
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
         minecraftVersions.add(project.minecraft_version)
-        minecraftVersions.add(project.minecraft_compat_version)
         client = true                    // >=1 of client/server REQUIRED by CurseForge (Error 1021)
         server = true
         changelogType = "markdown"
@@ -106,11 +117,10 @@ publishMods {
         projectId = providers.environmentVariable("MODRINTH_PROJECT_RAW_ID")
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.add(project.minecraft_version)
-        minecraftVersions.add(project.minecraft_compat_version)
     }
 
     // Each platform publishes its own GitHub release under a distinct, platform-suffixed
-    // tag (e.g. `1.2.1+1.21.1-neoforge`), so the two publish jobs don't collide.
+    // tag (e.g. `1.2.1.001+1.20.1-forge`), so the two publish jobs don't collide.
     github {
         repository = providers.environmentVariable("GH_OWNER")
                 .zip(providers.environmentVariable("GH_REPO")) { owner, repo -> "$owner/$repo" }

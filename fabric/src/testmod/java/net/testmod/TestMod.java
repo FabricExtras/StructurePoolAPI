@@ -17,9 +17,9 @@ public class TestMod implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             // Target structure pool
-            var targetPool = Identifier.of("minecraft:village/plains/houses");
+            var targetPool = new Identifier("minecraft:village/plains/houses");
             // Our structure (found amongst data files)
-            var structureId = Identifier.of("testmod:village/plains/gazebo");
+            var structureId = new Identifier("testmod:village/plains/gazebo");
             StructurePoolAPI.injectIntoStructurePool(
                     server,
                     targetPool, // Target structure pool
