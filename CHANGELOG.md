@@ -1,4 +1,4 @@
-# 1.2.1.001
+# 1.2.1+1.20.1
 
 - Backport to Minecraft 1.20.1 (Fabric + Forge 47)
 
