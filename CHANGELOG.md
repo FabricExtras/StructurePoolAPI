@@ -1,5 +1,6 @@
 # 1.3.0
 
+- Minecraft 26.3 support
 - Minecraft 26.2 support
 - Minecraft 26.1.2 support (Java 25).
 - Modernize package and maven group: Java package `net.rpg_foundation.structure_pool` (was `net.fabric_extras.structure_pool`), maven group `net.rpg_foundation` (was `net.foundation`); mod id and data unchanged
